@@ -5,9 +5,11 @@ import numpy as np
 
 # Config
 st.set_page_config(
-    layout="wide",
+    layout="centered",
     page_title="Immigration Analysis App",
-    page_icon="🌍 "
+    page_icon="🌍",
+    initial_sidebar_state='expanded',
+
 )
 years = list(range(1980,2014))
 cols_to_drop=['Type','Coverage','AREA','DEV','REG']
@@ -27,10 +29,10 @@ def load_data(path):
 with st.spinner('Processing Immigration Data'):
     df=load_data('Canada.xlsx')
 with st.container():
-    st.image("https://www.tc-ww.com/wp-content/uploads/2022/09/Canada-Immigration.jpg",width=200)
+    st.image("https://www.tc-ww.com/wp-content/uploads/2022/09/Canada-Immigration.jpg",width=800,caption='Canada Immigration',clamp=False)
     st.title("Immigration Analysis app")
     st.subheader("Data Summary")
-c1,c2,c3,c4,c5,c6=st.columns(6)
+c1,c2,c3,c4=st.columns(4)
 
 total_countries=df.shape[0]
 duration="1980-2013"
@@ -44,11 +46,12 @@ st.header("Immigration Visualization")
 fig=px.line(df,x=df.index,y='Total')
 st.plotly_chart(fig,use_container_width=True)
 
+
 top_countries=df.sort_values(by='Total',ascending=False).head(25)
 
-c1, c2=st.columns([1,3])
+c1, c2=st.columns([1,2])
 
-limit=c2.slider("Select Number of Countries",1,25, value=5)
+limit=c1.slider("Select Number of Countries",1,25, value=5)
 countries = top_countries.index.tolist()[:limit]
 countries_df = df.loc[countries,years].T
 fig2=px.area(countries_df,x=countries_df.index,y=countries_df.columns)
